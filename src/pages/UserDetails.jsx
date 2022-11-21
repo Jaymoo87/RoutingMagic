@@ -1,18 +1,29 @@
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
-import Home from "./Home";
+import { Link, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 const UserDetails = () => {
   const { userid } = useParams();
 
+  const [details, setDetails] = useState(null);
+
+  useEffect(() => {
+    fetch(`https://jsonplaceholder.typicode.com/users/${userid}`)
+      .then((res) => res.json())
+      .then((data) => setDetails(data))
+      .catch((e) => alert(e.message));
+  }, [userid]);
+
   return (
-    <main className="container">
-      <section className="row justify-content-center">
-        <div className="col-md-6">
-          <h1 className="text-center"> User {userid} Details Page</h1>
+    <div className="col-md-6">
+      <div className="card shadow border rounded">
+        <div className="card-body">
+          <h4 className="card-title">{details?.username}</h4>
+          <Link to="/users" className="btn btn-warning">
+            Go Back
+          </Link>
         </div>
-      </section>
-    </main>
+      </div>
+    </div>
   );
 };
 

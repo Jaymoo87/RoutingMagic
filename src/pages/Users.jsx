@@ -1,15 +1,30 @@
 import { Link } from "react-router-dom";
-import Home from "./Home";
+
+import { useState, useEffect } from "react";
 
 const Users = () => {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then((res) => res.json())
+      .then((data) => setUsers(data))
+      .catch((e) => alert(e.message));
+  }, []);
+
   return (
-    <main className="container">
-      <section className="row justify-content-center">
-        <div className="col-md-6">
-          <h1 className="text-center">Users Page</h1>
-        </div>
-      </section>
-    </main>
+    <div className="col-md-6">
+      <ul className="list-group">
+        {users.map((user) => (
+          <li key={`user-${user.id}`} className="list-group-item d-flex justify-content-between alighn-items-center">
+            {user.username}
+            <Link to={`/users/${user.id}`} className="btn btn-primary">
+              Full Details
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
 
